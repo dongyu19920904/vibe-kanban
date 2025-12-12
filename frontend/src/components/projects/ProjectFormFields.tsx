@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -42,6 +43,8 @@ export function ProjectFormFields({
   setError,
   onCreateProject,
 }: ProjectFormFieldsProps) {
+  const { t } = useTranslation('projects');
+
   // Repository loading state
   const [allRepos, setAllRepos] = useState<DirectoryEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -211,14 +214,15 @@ export function ProjectFormFields({
                       <div className="animate-spin h-5 w-5 border-2 border-muted-foreground border-t-transparent rounded-full"></div>
                       <div className="text-sm text-muted-foreground">
                         {loadingDuration < 2
-                          ? 'Searching for repositories...'
-                          : `Still searching... (${loadingDuration}s)`}
+                          ? t('repoSearch.searching')
+                          : t('repoSearch.stillSearching', {
+                              seconds: loadingDuration,
+                            })}
                       </div>
                     </div>
                     {loadingDuration >= 3 && (
                       <div className="text-xs text-muted-foreground mt-2 ml-8">
-                        This is taking longer than usual. You can browse
-                        manually below.
+                        {t('repoSearch.takingLonger')}
                       </div>
                     )}
                   </div>
@@ -246,10 +250,10 @@ export function ProjectFormFields({
                         <Folder className="h-5 w-5 mt-0.5 flex-shrink-0 text-muted-foreground" />
                         <div>
                           <div className="text-sm text-muted-foreground">
-                            No repositories found in common locations.
+                            {t('repoSearch.noReposFound')}
                           </div>
                           <div className="text-xs text-muted-foreground mt-1">
-                            Use the option below to browse for a repository.
+                            {t('repoSearch.browseHint')}
                           </div>
                         </div>
                       </div>
